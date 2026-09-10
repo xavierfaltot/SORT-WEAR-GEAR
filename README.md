@@ -1,29 +1,26 @@
-# SORT WEAR GEAR v0.1
+# SORT WEAR GEAR v0.2
 
-Local Mac app.
+Workflow corrected:
 
-## UI
-- GENS / PEOPLE drop zone
-- FRINGUES / GEAR drop zone
-- destination folder field
-- vaporwave pink / cyan / violet styling
-- integrated velcro logo
+1. SOURCES GENS / PEOPLE
+2. SOURCES FRINGUES / GEAR
+3. IMAGES À RANGER / ASSEMBLAGES
+4. DOSSIER DE DESTINATION
 
-## Current behavior
-This first build creates:
-- PEOPLE/
-- GEAR/
-- UNSORTED/
+The destination library becomes:
+
+- REFERENCES/PEOPLE/
+- REFERENCES/GEAR/
+- TO_SORT/
+- SORTED/BY_PEOPLE/
+- SORTED/BY_GEAR/
+- REVIEW/
 - library.json
 
-It copies selected images safely; originals are never moved or deleted.
+This build ingests and prepares the data safely.
+It does not yet perform visual recognition/clustering.
+That is the next step: classify each assembly against the reference people and garment categories you provide.
 
-## Start
-Double-click `INSTALL.command` the first time.
-Then use `START.command`.
-
-## Next step
-Visual clustering:
-- same synthetic/visual person across images
-- same garment across poses / people
-- merge / split review UI
+Start:
+- first time: INSTALL.command
+- later: START.command
