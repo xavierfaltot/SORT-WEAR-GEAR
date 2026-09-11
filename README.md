@@ -1,4 +1,6 @@
-# SORT WEAR GEAR v0.4 — MULTI-MATCH + REVIEW
+# SORT WEAR GEAR
+
+**v0.4 — MULTI-MATCH + REVIEW**
 
 Local-first visual sorting machine for generated fashion image libraries.
 
@@ -9,6 +11,16 @@ Local-first visual sorting machine for generated fashion image libraries.
 - `TO_SORT/` — generated assemblies
 
 The reference filename stem becomes the category name.
+
+## Duplicate handling
+
+SORT WEAR GEAR never deletes or moves the originals.
+
+Before matching, exact duplicate images are detected by SHA-256 content hash. If the same PEOPLE or GEAR reference is present several times, only one canonical copy is used by the matcher. Duplicate assemblies are also ignored during a sorting run.
+
+Exports are duplicate-free: the same image payload is never copied twice into the same `BY_PEOPLE`, `BY_GEAR`, or `REVIEW` destination, even if duplicate references or repeated source files exist.
+
+A `duplicates_report.json` records which files were ignored and which canonical file they matched.
 
 ## Output
 
@@ -25,6 +37,7 @@ sorting_report.csv
 library.json
 predictions.json
 corrections.json
+duplicates_report.json
 ```
 
 Original images are never moved or deleted. `SORTED` and `REVIEW` contain generated copies and can be rebuilt safely.
@@ -33,6 +46,8 @@ Original images are never moved or deleted. `SORTED` and `REVIEW` contain genera
 
 ```text
 ASSEMBLAGE
+  ↓
+DEDUP REFERENCES / SOURCES
   ↓
 OpenCLIP ViT-B-32 semantic embedding
   +
@@ -47,13 +62,15 @@ MULTI-GARMENT selection
 AMBIGUITY thresholds / score margins
   ↓
 REVIEW
+  ↓
+DUPLICATE-FREE EXPORT
 ```
 
-This is intentionally different from a single semantic classifier: multiple body regions can nominate different exact garment references in the same image.
+Multiple body regions can nominate different exact garment references in the same image.
 
 ## REVIEW
 
-The Review tab shows only ambiguous cases and lets you:
+The Review tab shows ambiguous cases and lets you:
 
 - inspect the predicted image;
 - change the predicted PERSON;
@@ -82,8 +99,8 @@ The first vision run downloads the OpenCLIP and DINOv2 model weights. After they
 - GARMENT minimum score: `0.47`
 - Maximum garments per image: `5`
 
-These values are deliberately exposed in the UI because the best threshold depends on how visually similar the reference wardrobe is.
+These values are exposed in the UI because the best threshold depends on how visually similar the reference wardrobe is.
 
-## Current limitation / next precision layer
+## Current precision layer
 
-v0.4 uses deterministic body-region crops rather than a garment segmentation model. This keeps the first robust build simple and local. If exact matching remains weak for near-identical garments, the next layer should be segmentation/object regions + DINO patch-level matching rather than lowering thresholds blindly.
+v0.4 uses deterministic body-region crops. If exact matching remains weak for near-identical garments, the next precision layer is garment segmentation/object regions + DINO patch-level matching.
